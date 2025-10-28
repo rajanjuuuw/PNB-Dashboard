@@ -1665,7 +1665,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
-                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Nilai (Miliar USD)' } } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Nilai (Juta USD)' } } },
                     plugins: {
                       legend: { position: 'top' },
                       tooltip: {
@@ -1708,7 +1708,7 @@
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { x: { title: { display: true, text: 'Nilai (Miliar USD)' }, ticks: { callback: (val) => Utils.formatCurrency(Number(val)) } } },
+                    scales: { x: { title: { display: true, text: 'Nilai (Juta USD)' }, ticks: { callback: (val) => Utils.formatCurrency(Number(val)) } } },
                     plugins: {
                       legend: { position: 'top' },
                       tooltip: { callbacks: { label: (ctx) => { let label = ctx.dataset.label || ''; let raw = ctx.raw; if (label.includes('Cost')) raw = -raw; return `${label}: ${Utils.formatCurrency(raw)}`; } } }

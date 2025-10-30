@@ -1,182 +1,172 @@
-// ====== PNB Dashboard Script ======
+document.addEventListener("DOMContentLoaded", () => {
 
-// ---- Tab Interaktif ----
-const tabs = document.querySelectorAll('.tab');
-const tabContents = document.querySelectorAll('.tab-content');
+    // === REAL-TIME LAST UPDATE FUNCTIONALITY ===
+    function updateLastUpdateTime() {
+        const now = new Date();
+        const options = { 
+            day: 'numeric', 
+            month: 'short', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        if (lastUpdateElement) {
+            lastUpdateElement.textContent = now.toLocaleDateString('en-GB', options);
+        }
+    }
 
-tabs.forEach((tab, i) => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+    // Update timestamp saat page load
+    updateLastUpdateTime();
 
-    tabContents.forEach(c => c.classList.remove('active'));
-    tabContents[i].classList.add('active');
-  });
-});
+    // Update otomatis setiap 1 detik untuk menunjukkan waktu real-time
+    setInterval(updateLastUpdateTime, 1000);
 
-// ---- Inisialisasi Chart.js Global ----
-Chart.defaults.font.family = "'Inter', sans-serif";
-Chart.defaults.font.size = 13;
-Chart.defaults.color = "#333";
-Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    // Update timestamp saat file CSV di-upload
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                // Proses file CSV di sini...
+                console.log('File uploaded:', e.target.files[0].name);
+                
+                // Update timestamp setelah file berhasil di-upload
+                updateLastUpdateTime();
+                
+                // Tampilkan notifikasi (optional)
+                showUploadNotification();
+            }
+        });
+    }
 
-// ---- P/L per Product ----
-const initPLPerProductChart = () => {
-  const ctx = document.getElementById("plPerProductChart").getContext("2d");
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["Aromatics", "Methanol", "Propylene", "Styrene", "Toluene"],
-      datasets: [
-        {
-          label: "Profit (USD)",
-          data: [125000, 95000, 88000, 105000, 72000],
-          backgroundColor: "rgba(56, 149, 255, 0.7)",
-          borderRadius: 10,
-          borderSkipped: false,
-        },
-        {
-          label: "Loss (USD)",
-          data: [20000, 12000, 18000, 15000, 8000],
-          backgroundColor: "rgba(255, 99, 132, 0.6)",
-          borderRadius: 10,
-          borderSkipped: false,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: "index" },
-      plugins: {
-        legend: { position: "bottom" },
-        tooltip: {
-          backgroundColor: "#fff",
-          titleColor: "#333",
-          bodyColor: "#555",
-          borderColor: "#ddd",
-          borderWidth: 1,
-          boxPadding: 6,
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: { color: "rgba(0,0,0,0.05)" },
-          ticks: { callback: v => "$" + v.toLocaleString() },
-        },
-      },
-      animation: {
-        duration: 1200,
-        easing: "easeOutQuart",
-      },
-    },
-  });
-};
+    // Fungsi notifikasi upload (optional)
+    function showUploadNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+        notification.textContent = 'Data updated successfully!';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
 
-// ---- P/L Deviation ----
-const initPLDeviationChart = () => {
-  const ctx = document.getElementById("plDeviationChart").getContext("2d");
-  new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-      datasets: [
-        {
-          label: "Target",
-          data: [100, 120, 130, 110, 150, 160],
-          borderColor: "#38a1ff",
-          borderWidth: 2,
-          tension: 0.3,
-          pointRadius: 4,
-          pointBackgroundColor: "#38a1ff",
-          fill: false,
-        },
-        {
-          label: "Actual",
-          data: [95, 110, 125, 100, 145, 155],
-          borderColor: "#ff6384",
-          borderWidth: 2,
-          tension: 0.3,
-          pointRadius: 4,
-          pointBackgroundColor: "#ff6384",
-          fill: false,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { intersect: false, mode: "nearest" },
-      plugins: {
-        legend: { position: "bottom" },
-        tooltip: {
-          usePointStyle: true,
-          backgroundColor: "#d34545ff",
-          borderColor: "#ccc",
-          borderWidth: 1,
-          titleColor: "#000",
-          bodyColor: "#555",
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: { color: "rgba(0,0,0,0.05)" },
-        },
-      },
-      animation: { duration: 1200, easing: "easeInOutCubic" },
-    },
-  });
-};
+    // === 1. DATA AND CHART INITIALIZATION (Placeholder) ===
+    if (typeof initPLSummaryChart === 'function') initPLSummaryChart();
+    if (typeof initPLPerProductChart === 'function') initPLPerProductChart();
+    if (typeof initPLDeviationChart === 'function') initPLDeviationChart();
+    if (typeof initCustomerPieChart === 'function') initCustomerPieChart();
+    if (typeof populatePLProductTable === 'function') populatePLProductTable();
 
-// ---- P/L per Customer ----
-const initPLPerCustomerChart = () => {
-  const ctx = document.getElementById("plPerCustomerChart").getContext("2d");
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["PT KPI", "Petronas", "ExxonMobil", "Shell", "CNOOC"],
-      datasets: [
-        {
-          data: [35, 25, 20, 15, 5],
-          backgroundColor: [
-            "rgba(56,149,255,0.8)",
-            "rgba(255,206,86,0.8)",
-            "rgba(75,192,192,0.8)",
-            "rgba(255,99,132,0.8)",
-            "rgba(153,102,255,0.8)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      cutout: "65%",
-      plugins: {
-        legend: { position: "bottom" },
-        tooltip: {
-          backgroundColor: "#fff",
-          titleColor: "#000",
-          bodyColor: "#444",
-          borderColor: "#ddd",
-          borderWidth: 1,
-        },
-      },
-      animation: {
-        animateRotate: true,
-        animateScale: true,
-        duration: 1200,
-        easing: "easeOutBack",
-      },
-    },
-  });
-};
+    // === 2. SIDEBAR NAVIGATION LOGIC ===
+    const commercialToggle = document.getElementById("commercialToggle");
+    const commercialSubmenu = document.getElementById("commercialSubmenu");
+    const commercialIcon = commercialToggle ? commercialToggle.querySelector("svg") : null;
+    
+    const tabButtons = document.querySelectorAll('#sidebarNav .tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    // Inisialisasi: Default tab yang aktif adalah P/L
+    const defaultTabId = 'pl';
+    
+    /**
+     * Mengubah tampilan konten dan status tombol sidebar
+     * @param {string} tabId - ID tab yang akan ditampilkan (e.g., 'pl', 'operation')
+     */
+    const switchTab = (tabId) => {
+        // Sembunyikan semua konten dan hapus status 'active' dari tombol
+        tabContents.forEach(content => {
+            content.classList.add('hidden');
+        });
 
-// ---- Jalankan Semua Chart ----
-window.addEventListener("DOMContentLoaded", () => {
-  initPLPerProductChart();
-  initPLDeviationChart();
-  initPLPerCustomerChart();
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active', 'bg-gray-100');
+            // Menghapus gaya khusus untuk Commercial Toggle
+            if (btn.id !== 'commercialToggle') {
+                btn.classList.remove('font-semibold');
+                btn.classList.add('font-medium', 'text-gray-700', 'hover:bg-gray-100');
+            }
+        });
+        
+        // Atur konten target menjadi aktif
+        const targetContent = document.getElementById(`tab-${tabId}`);
+        if (targetContent) {
+            targetContent.classList.remove('hidden');
+        }
+
+        // Atur tombol target menjadi aktif
+        const activeButton = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active', 'bg-gray-100');
+            activeButton.classList.remove('font-medium', 'text-gray-700', 'hover:bg-gray-100');
+        }
+        
+        // Pastikan Commercial Toggle tetap aktif jika sub-menu yang dipilih
+        if (['pl', 'salesfunnel'].includes(tabId)) {
+            if (commercialToggle) {
+                commercialToggle.classList.add('active', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
+                commercialIcon.classList.add('rotate-180');
+                commercialSubmenu.classList.remove('hidden');
+            }
+        } else {
+             if (commercialToggle) {
+                commercialToggle.classList.remove('active', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
+                commercialToggle.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+             }
+        }
+    };
+
+    // Event Listener untuk Commercial Toggle
+    if(commercialToggle) {
+        commercialToggle.addEventListener("click", () => {
+            commercialSubmenu.classList.toggle("hidden");
+            commercialIcon.classList.toggle("rotate-180");
+        });
+    }
+
+    // Event Listener untuk Navigasi Tab
+    tabButtons.forEach(button => {
+        button.addEventListener("click", (e) => {
+            const tabId = e.currentTarget.getAttribute("data-tab");
+            switchTab(tabId);
+            
+            if (e.currentTarget.id === 'commercialToggle') {
+                if (!commercialSubmenu.classList.contains('hidden')) {
+                    // Sub-menu dibuka
+                } else {
+                    switchTab(defaultTabId); 
+                }
+            }
+        });
+    });
+
+    // Inisialisasi default tab
+    switchTab(defaultTabId);
+    
+    // === 4. EXPORT LOGIC ===
+    const exportPLPdfBtn = document.getElementById('exportPLPdf');
+    if (exportPLPdfBtn) {
+        exportPLPdfBtn.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("P/L Analysis — YTD September 2025", 14, 10);
+            
+            // Mengambil data tabel P/L per produk
+            const tableData = plProductData.map(item => [
+                item.produk,
+                formatCurrency(item.revenue),
+                formatCurrency(item.cost),
+                formatCurrency(item.pl)
+            ]);
+            
+            doc.autoTable({
+                head: [['Produk', 'Revenue (M)', 'Cost (M)', 'P/L (M)']],
+                body: tableData,
+                startY: 20
+            });
+            
+            doc.save('PL_Analysis_YTD_Sept_2025.pdf');
+        });
+    }
 });

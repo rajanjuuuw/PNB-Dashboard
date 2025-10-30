@@ -332,10 +332,10 @@
       style="height: calc(100vh - 4rem); overflow-y: auto;">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white"
-          style="background: linear-gradient(135deg,#b71c1c,#001f3f)">P</div>
+          style="background: linear-gradient(135deg,#b71c1c,#001f3f)">PIS</div>
         <div>
-          <div class="text-sm font-semibold text-[#001f3f]">PIS</div>
-          <div class="text-xs text-gray-500">Petrochemical & New Business</div>
+          <div class="text-sm font-semibold text-[#001f3f]">PNB - BI Dashboard</div>
+          <div class="text-xs text-gray-500">PT Pertamina International Shipping</div>
         </div>
       </div>
       <nav class="mt-6 flex flex-col gap-2" id="sidebarNav">
@@ -363,7 +363,45 @@
           Research</button>
       </nav>
       <input id="fileInput" type="file" accept=".csv" class="mt-4 text-sm" />
-      <div class="mt-4 text-xs text-gray-400">Last update: <span id="lastUpdate">28 Oct 2025</span></div>
+      <!-- Seharusnya seperti ini -->
+      <div class="mt-4 flex items-center gap-1 text-xs text-gray-500">
+        <span class="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        <span>Last Updated: <span id="lastUpdate">-</span></span>
+      </div>
+
+      <script>
+        // === Fungsi untuk update waktu secara real-time ===
+        function updateLastUpdateTime() {
+          const now = new Date();
+
+          // Format waktu jadi lebih rapi, contoh: "29 Oct 2025, 14:45"
+          const formatted = now.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          }).replace(",", "");
+
+          const el = document.getElementById("lastUpdate");
+          if (el) el.textContent = formatted;
+        }
+
+        // === Jalankan saat halaman pertama kali dimuat ===
+        updateLastUpdateTime();
+
+        // === Update otomatis setiap 1 menit ===
+        setInterval(updateLastUpdateTime, 60000);
+
+        // === Update waktu ketika user upload file CSV ===
+        const fileInput = document.getElementById("fileInput");
+        if (fileInput) {
+          fileInput.addEventListener("change", () => {
+            updateLastUpdateTime();
+          });
+        }
+      </script>
+
     </aside>
 
     <main class="pane overflow-auto">
@@ -374,7 +412,7 @@
         </div>
         <div class="flex items-center gap-3">
           <div class="text-sm text-gray-600">User: Antariksa R.</div>
-          <div class="px-3 py-2 rounded-lg bg-white border text-sm">Sept 2025</div>
+          <div class="px-3 py-2 rounded-lg bg-white border text-sm">Oktober 2025</div>
         </div>
       </div>
 
@@ -424,7 +462,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 hidden">
               <div class="bg-white rounded-xl p-4 card-shadow border">
                 <div class="text-sm font-semibold text-[#001f3f]">Revenue</div>
                 <div class="text-lg font-bold text-green-600" id="cardRevenue">$30.3M</div>
@@ -455,7 +493,7 @@
 
               <div class="bg-white rounded-xl p-5 card-shadow border lg:col-span-2">
                 <div class="flex items-center justify-between mb-4">
-                  <div class="text-sm font-semibold text-[#001f3f]">Realisasi per Produk YTD September 2025</div>
+                  <div class="text-sm font-semibold text-[#001f3f]">Estimasi Realisasi Revenue YTD September 2025</div>
                   <div class="flex gap-2 text-xs">
                     <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-500"></span>P/L</span>
                     <span class="flex items-center gap-1"><span
@@ -504,7 +542,7 @@
             </div>
 
             <div class="bg-white rounded-xl p-5 card-shadow border mb-6">
-              <div class="text-sm font-semibold text-[#001f3f] mb-4">Kontribusi Pendapatan per Customer YTD Sept 2025
+              <div class="text-sm font-semibold text-[#001f3f] mb-4">Monitoring Penagihan YTD Sept 2025
               </div>
               <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="relative h-64"><canvas id="customerPieChart"></canvas></div>
@@ -1228,7 +1266,7 @@
 
           <!-- TAB OPERATION -->
           <div id="tab-operation" class="tab-content hidden card rounded-2xl p-6 bg-white" data-tab="operation">
-            <h3 class="text-lg font-bold text-[#001f3f] mb-6">Operational — September 2025</h3>
+            <h3 class="text-lg font-bold text-[#001f3f] mb-6">Operation — YTD September 2025</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200 card-shadow">
                 <div class="text-sm text-gray-600 font-semibold mb-2">Total Vessels</div>
@@ -1256,7 +1294,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               <div class="bg-white rounded-xl p-6 card-shadow border">
-                <h4 class="text-base font-bold text-[#001f3f] mb-4">Shipment Profile (Sept 2025)</h4>
+                <h4 class="text-base font-bold text-[#001f3f] mb-4">Shipment Profile (September 2025)</h4>
                 <div class="relative h-80"><canvas id="shipmentChart"></canvas></div>
                 <div class="text-xs text-gray-500 mt-3 p-3 bg-blue-50 rounded-lg">
                   <span class="font-semibold text-[#001f3f]">Insight:</span> PIS Mahakam dan Kakap memiliki jumlah
@@ -1264,7 +1302,7 @@
                 </div>
               </div>
               <div class="bg-white rounded-xl p-6 card-shadow border">
-                <h4 class="text-base font-bold text-[#001f3f] mb-4">Volume Terangkut (KL) — YTD 2025</h4>
+                <h4 class="text-base font-bold text-[#001f3f] mb-4">Volume Terangkut (KL) — YTD September 2025</h4>
                 <div class="relative h-80"><canvas id="volumeChart"></canvas></div>
                 <div class="text-xs text-gray-500 mt-3 p-3 bg-green-50 rounded-lg">
                   <span class="font-semibold text-[#001f3f]">Insight:</span> Volume terangkut mencapai 390.4 KL di
@@ -1275,7 +1313,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               <div class="bg-white rounded-xl p-6 card-shadow border">
-                <h4 class="text-base font-bold text-[#001f3f] mb-4">Commercial Days — YTD 2025</h4>
+                <h4 class="text-base font-bold text-[#001f3f] mb-4">Commercial Days — YTD September 2025</h4>
                 <div class="relative h-80"><canvas id="commChart"></canvas></div>
                 <div class="text-xs text-gray-500 mt-3 p-3 bg-orange-50 rounded-lg">
                   <span class="font-semibold text-[#001f3f]">Insight:</span> Freight Domestic mendominasi dengan
@@ -1996,13 +2034,16 @@
               },
 
               switchTab: (tabId) => {
+                // Hide all tab contents
                 document.querySelectorAll('.tab-content').forEach(c => {
                   c.classList.add('hidden');
                   c.style.display = 'none';
                 });
+                
+                // Reset ALL buttons (including Commercial toggle and submenu items)
                 document.querySelectorAll('#sidebarNav .tab-btn').forEach(btn => {
                   btn.classList.remove('active', 'bg-gray-100', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
-                  btn.classList.add('text-gray-700', 'hover:bg-gray-100');
+                  btn.classList.add('text-gray-700');
                 });
 
                 // Hide KPI section for non-commercial tabs
@@ -2013,21 +2054,42 @@
                   kpiSection.style.display = 'block';
                 }
 
+                // Show selected tab content
                 const target = document.getElementById(`tab-${tabId}`);
                 if (target) {
                   target.classList.remove('hidden');
                   target.style.display = 'block';
                 }
 
+                // Highlight active button
                 const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
                 if (activeBtn) {
                   activeBtn.classList.add('active', 'bg-gray-100');
-                  activeBtn.classList.remove('text-gray-700', 'hover:bg-gray-100');
-                  if (tabId === 'pl' || tabId === 'salesfunnel') {
-                    const toggle = document.getElementById('commercialToggle');
-                    toggle.classList.add('active', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
-                    toggle.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-100');
-                  }
+                  activeBtn.classList.remove('text-gray-700');
+                }
+                
+                // Handle Commercial submenu highlighting
+                if (tabId === 'pl' || tabId === 'salesfunnel') {
+                  const toggle = document.getElementById('commercialToggle');
+                  toggle.classList.add('active', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
+                  toggle.classList.remove('text-gray-700');
+                  // Ensure submenu is visible
+                  document.getElementById('commercialSubmenu').classList.remove('hidden');
+                  document.querySelector('#commercialToggle svg').classList.add('rotate-180');
+                }
+                
+                // Handle Operation tab highlighting
+                if (tabId === 'operation') {
+                  const operationBtn = document.querySelector('.tab-btn[data-tab="operation"]');
+                  operationBtn.classList.add('active', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
+                  operationBtn.classList.remove('text-gray-700', 'bg-gray-100');
+                }
+                
+                // Handle Market tab highlighting
+                if (tabId === 'market') {
+                  const marketBtn = document.querySelector('.tab-btn[data-tab="market"]');
+                  marketBtn.classList.add('active', 'bg-gradient-to-r', 'from-[#001f3f]/80', 'to-[#b71c1c]/80', 'text-white');
+                  marketBtn.classList.remove('text-gray-700', 'bg-gray-100');
                 }
 
                 // Initialize charts based on tab
